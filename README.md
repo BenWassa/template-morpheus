@@ -67,6 +67,25 @@ public/
   └── manifest.webmanifest - PWA manifest
 
 docs/                       - Built output (GitHub Pages)
+
+## Deployment
+
+### GitHub Pages Setup
+
+1. **Update Base Path**: In `vite.config.js`, change the `base` to match your repository name:
+   ```javascript
+   base: '/your-repo-name/',
+   ```
+
+2. **Enable GitHub Pages**: Go to repository Settings → Pages → Source → "Deploy from a branch" → Branch "main" → Folder "/docs"
+
+3. **Build and Deploy**:
+   ```bash
+   npm run build
+   git add docs && git commit -m "Deploy to GitHub Pages" && git push
+   ```
+
+The app will be available at `https://yourusername.github.io/your-repo-name/`
 ```
 
 ## Component Highlights
