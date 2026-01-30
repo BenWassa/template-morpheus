@@ -1,0 +1,28 @@
+{
+  "date": "2025-04-15",
+  "originalTranscription": "The city streets are made of water that remembers every step taken upon it. Footprints from the past appear and disappear like ghosts, showing where people walked years ago. Buildings rise and fall with the tides, their windows reflecting not just light but entire other worlds. I walk through this fluid city, my reflection in puddles showing different versions of myself from parallel lives. The water whispers secrets of choices made and paths not taken.",
+  "summary": "A fluid city where streets of water remember every footprint and buildings rise and fall with tides, revealing parallel lives and the ghosts of past choices through reflective surfaces.",
+  "keywords": [
+    "water streets",
+    "memory footsteps",
+    "tidal buildings",
+    "parallel lives",
+    "reflective worlds",
+    "forgotten choices",
+    "fluid architecture"
+  ],
+  "scenes": [
+    {
+      "text": "City streets made of water display ghostly footprints from the past, while buildings rise and fall with ocean tides in a constantly shifting urban landscape.",
+      "image": "images/2025-04-15-01.jpg"
+    },
+    {
+      "text": "Puddles and windows reflect parallel versions of the dreamer from different lives, while the water whispers secrets of choices made and paths not taken.",
+      "image": "images/2025-04-15-02.jpg"
+    }
+  ],
+  "fragments": [
+    "The cool sensation of walking on water that remembers.",
+    "The sound of water whispering forgotten secrets."
+  ]
+}
