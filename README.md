@@ -2,6 +2,10 @@
 
 A React + Vite template with modern UI patterns including glassmorphism components.
 
+## Origin
+
+This repository is a template derived from the original "Project Morpheus - Dream Archive System." It keeps the core UI patterns and glassmorphism system while removing the product-specific data and workflow so it can be reused for new projects.
+
 ## Tech Stack
 
 - **React 18** - UI library
