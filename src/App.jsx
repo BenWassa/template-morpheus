@@ -682,7 +682,20 @@ Return only well-formed JSON that strictly follows the schema and constraints ab
             <div className="flex justify-between items-center mb-8 pb-8 border-b border-white/5">
               <h3 className="text-xl text-white font-display">Review & Assets</h3>
               <button
-                onClick={() => setIsParsed(false)}
+                onClick={() => {
+                  setIsParsed(false);
+                  setJsonText('');
+                  setDate(new Date().toISOString().split('T')[0]);
+                  setFormData({
+                    originalTranscription: '',
+                    summary: '',
+                    keywords: '',
+                    scenes: [],
+                    fragments: '',
+                  });
+                  setScenes([]);
+                  setError('');
+                }}
                 className="text-xs text-slate-500 hover:text-red-400 uppercase tracking-widest transition-colors"
               >
                 Reset Form
