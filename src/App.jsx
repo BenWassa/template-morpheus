@@ -199,7 +199,8 @@ const GalleryView = () => {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedEntry, setSelectedEntry] = useState(null);
-  const baseUrl = import.meta.env.BASE_URL || '/';
+  // For dev: fetch from /public/entries, for prod: use BASE_URL
+  const baseUrl = import.meta.env.DEV ? '/' : import.meta.env.BASE_URL || '/';
 
   useEffect(() => {
     loadEntries();
@@ -208,28 +209,45 @@ const GalleryView = () => {
   const loadEntries = async () => {
     try {
       // Add a cache-busting timestamp to ensure we always get the latest entry list
-      const indexResponse = await fetch(`${baseUrl}index.json?v=${Date.now()}`);
-      if (!indexResponse.ok) throw new Error('Could not load index');
+      const indexUrl = `${baseUrl}index.json?v=${Date.now()}`;
+      console.log('Fetching index from:', indexUrl);
+      const indexResponse = await fetch(indexUrl);
+      if (!indexResponse.ok) throw new Error(`Could not load index: ${indexResponse.status} ${indexResponse.statusText}`);
 
-      const indexData = await indexResponse.json();
+      const indexText = await indexResponse.text();
+      console.log('Index response text:', indexText);
+      if (!indexText || indexText.trim() === '') {
+        throw new Error('Index response is empty');
+      }
+      const indexData = JSON.parse(indexText);
       const loadedEntries = [];
 
       for (const id of indexData.entries) {
         try {
-          const res = await fetch(`${baseUrl}entries/${id}.json?v=${Date.now()}`);
+          const entryUrl = `${baseUrl}entries/${id}.json?v=${Date.now()}`;
+          console.log('Fetching entry from:', entryUrl);
+          const res = await fetch(entryUrl);
           if (res.ok) {
-            const data = await res.json();
+            const entryText = await res.text();
+            console.log(`Entry ${id} response text length:`, entryText.length);
+            if (!entryText || entryText.trim() === '') {
+              console.warn(`Entry ${id} response is empty`);
+              continue;
+            }
+            const data = JSON.parse(entryText);
             loadedEntries.push(data);
+          } else {
+            console.warn(`Failed to load entry ${id}: ${res.status} ${res.statusText}`);
           }
         } catch (e) {
-          console.warn(e);
+          console.warn(`Error loading entry ${id}:`, e);
         }
       }
 
       loadedEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
       setEntries(loadedEntries);
     } catch (err) {
-      console.error(err);
+      console.error('Error loading entries:', err);
     } finally {
       setLoading(false);
     }

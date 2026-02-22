@@ -8,4 +8,7 @@ export default defineConfig({
   build: {
     outDir: 'docs',
   },
+  server: {
+    middlewareMode: false,
+  },
 });
