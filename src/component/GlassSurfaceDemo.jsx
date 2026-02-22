@@ -1,12 +1,16 @@
-import React from 'react';
-import GlassSurface from './GlassSurface';
-import GlassSurfaceReactBits from './GlassSurfaceReactBits';
+import React from "react";
+import GlassSurface from "./GlassSurface";
+import GlassSurfaceReactBits from "./GlassSurfaceReactBits";
 
 const DemoSection = ({ title, subtitle, bgImage, children }) => (
   <div className="space-y-4 max-w-4xl mx-auto mb-16">
     <div className="flex flex-col ml-2">
-      <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500">{title}</h3>
-      {subtitle && <p className="text-xs text-slate-400 capitalize">{subtitle}</p>}
+      <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500">
+        {title}
+      </h3>
+      {subtitle && (
+        <p className="text-xs text-slate-400 capitalize">{subtitle}</p>
+      )}
     </div>
     <section className="relative w-full rounded-3xl overflow-hidden h-[400px] flex items-center justify-center shadow-2xl border border-white/10 group">
       {bgImage && (
@@ -19,7 +23,9 @@ const DemoSection = ({ title, subtitle, bgImage, children }) => (
           <div className="absolute inset-0 bg-black/10" />
         </>
       )}
-      <div className="relative z-10 flex flex-col items-center gap-8 w-full">{children}</div>
+      <div className="relative z-10 flex flex-col items-center gap-8 w-full">
+        {children}
+      </div>
     </section>
   </div>
 );
@@ -27,9 +33,12 @@ const DemoSection = ({ title, subtitle, bgImage, children }) => (
 const GlassSurfaceDemo = () => (
   <div className="p-12 min-h-screen bg-neutral-950 text-white">
     <header className="max-w-4xl mx-auto mb-16 text-center">
-      <h1 className="text-5xl font-display font-bold text-white mb-4">GlassSurface</h1>
+      <h1 className="text-5xl font-display font-bold text-white mb-4">
+        GlassSurface
+      </h1>
       <p className="text-slate-400 text-lg">
-        Pixel-perfect glass effects with refraction, chromatic aberration, and polish.
+        Pixel-perfect glass effects with refraction, chromatic aberration, and
+        polish.
       </p>
     </header>
 
@@ -76,7 +85,9 @@ const GlassSurfaceDemo = () => (
             <span className="text-xs uppercase tracking-widest text-white/60 font-bold mb-1">
               Project
             </span>
-            <span className="text-4xl font-bold text-white drop-shadow-sm">Aurora Blue</span>
+            <span className="text-4xl font-bold text-white drop-shadow-sm">
+              Aurora Blue
+            </span>
           </div>
           <div className="text-right">
             <span className="inline-flex items-center rounded-full bg-cyan-400/20 px-4 py-1.5 text-xs font-semibold text-cyan-300 ring-1 ring-inset ring-cyan-400/30 backdrop-blur-sm">
@@ -98,7 +109,12 @@ const GlassSurfaceDemo = () => (
             Standard Glass
           </p>
           <div className="relative h-48 rounded-2xl overflow-hidden flex items-center justify-center bg-[url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=2070&auto=format&fit=crop')] bg-cover">
-            <GlassSurface width={140} height={80} backgroundOpacity={0.1} polish={false}>
+            <GlassSurface
+              width={140}
+              height={80}
+              backgroundOpacity={0.1}
+              polish={false}
+            >
               <span className="text-white font-bold">Standard</span>
             </GlassSurface>
           </div>
@@ -108,7 +124,12 @@ const GlassSurfaceDemo = () => (
             Polished Glass
           </p>
           <div className="relative h-48 rounded-2xl overflow-hidden flex items-center justify-center bg-[url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=2070&auto=format&fit=crop')] bg-cover">
-            <GlassSurface width={140} height={80} backgroundOpacity={0.05} polish={true}>
+            <GlassSurface
+              width={140}
+              height={80}
+              backgroundOpacity={0.05}
+              polish={true}
+            >
               <span className="text-white font-bold">Polished</span>
             </GlassSurface>
           </div>
@@ -118,7 +139,9 @@ const GlassSurfaceDemo = () => (
 
     <footer className="max-w-4xl mx-auto mt-24 pb-12 text-center text-slate-600 text-sm">
       <p>Background imagery via Unsplash.</p>
-      <p className="mt-2">Note: Displacement effects require a Chromium-based browser.</p>
+      <p className="mt-2">
+        Note: Displacement effects require a Chromium-based browser.
+      </p>
     </footer>
   </div>
 );

@@ -1,17 +1,17 @@
-import { useEffect, useRef, useState, useId } from 'react';
+import { useEffect, useRef, useState, useId } from "react";
 
 const useDarkMode = () => {
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     setIsDark(mediaQuery.matches);
 
     const handler = (e) => setIsDark(e.matches);
-    mediaQuery.addEventListener('change', handler);
-    return () => mediaQuery.removeEventListener('change', handler);
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
   }, []);
 
   return isDark;
@@ -45,19 +45,19 @@ const GlassSurface = ({
   greenOffset = 10,
   blueOffset = 20,
   polish = false,
-  xChannel = 'R',
-  yChannel = 'G',
-  mixBlendMode = 'difference',
+  xChannel = "R",
+  yChannel = "G",
+  mixBlendMode = "difference",
   useSvg = true,
   forceBackdrop = false,
-  theme = 'auto',
+  theme = "auto",
   highlight = true,
   highlightOpacity = 0.6,
   borderOpacity = 0.28,
-  className = '',
+  className = "",
   style = {},
 }) => {
-  const uniqueId = useId().replace(/:/g, '-');
+  const uniqueId = useId().replace(/:/g, "-");
   const filterId = `glass-filter-${uniqueId}`;
   const redGradId = `red-grad-${uniqueId}`;
   const blueGradId = `blue-grad-${uniqueId}`;
@@ -71,10 +71,10 @@ const GlassSurface = ({
   const blueChannelRef = useRef(null);
   const gaussianBlurRef = useRef(null);
 
-  const isDarkMode = theme === 'auto' ? useDarkMode() : theme === 'dark';
+  const isDarkMode = theme === "auto" ? useDarkMode() : theme === "dark";
   const prefersReducedMotion =
-    typeof window !== 'undefined' && window.matchMedia
-      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    typeof window !== "undefined" && window.matchMedia
+      ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
       : false;
 
   const generateDisplacementMap = () => {
@@ -106,7 +106,7 @@ const GlassSurface = ({
   };
 
   const updateDisplacementMap = () => {
-    feImageRef.current?.setAttribute('href', generateDisplacementMap());
+    feImageRef.current?.setAttribute("href", generateDisplacementMap());
   };
 
   useEffect(() => {
@@ -118,14 +118,20 @@ const GlassSurface = ({
     ].forEach(({ ref, offset }) => {
       if (ref.current) {
         const extra = polish && !prefersReducedMotion ? 20 : 0;
-        ref.current.setAttribute('scale', (distortionScale + offset + extra).toString());
-        ref.current.setAttribute('xChannelSelector', xChannel);
-        ref.current.setAttribute('yChannelSelector', yChannel);
+        ref.current.setAttribute(
+          "scale",
+          (distortionScale + offset + extra).toString(),
+        );
+        ref.current.setAttribute("xChannelSelector", xChannel);
+        ref.current.setAttribute("yChannelSelector", yChannel);
       }
     });
 
     const extraBlur = polish && !prefersReducedMotion ? 0.8 : 0;
-    gaussianBlurRef.current?.setAttribute('stdDeviation', (displace + extraBlur).toString());
+    gaussianBlurRef.current?.setAttribute(
+      "stdDeviation",
+      (displace + extraBlur).toString(),
+    );
   }, [
     width,
     height,
@@ -181,39 +187,40 @@ const GlassSurface = ({
   }, []);
 
   const supportsSVGFilters = () => {
-    if (typeof window === 'undefined' || typeof document === 'undefined') {
+    if (typeof window === "undefined" || typeof document === "undefined") {
       return false;
     }
 
-    const isWebkit = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+    const isWebkit =
+      /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
     const isFirefox = /Firefox/.test(navigator.userAgent);
 
     if (isWebkit || isFirefox) {
       return false;
     }
 
-    const div = document.createElement('div');
+    const div = document.createElement("div");
     div.style.backdropFilter = `url(#${filterId})`;
 
-    return div.style.backdropFilter !== '';
+    return div.style.backdropFilter !== "";
   };
 
   const supportsBackdropFilter = () => {
-    if (typeof window === 'undefined') return false;
+    if (typeof window === "undefined") return false;
     return (
-      CSS.supports('backdrop-filter', 'blur(10px)') ||
-      CSS.supports('-webkit-backdrop-filter', 'blur(10px)')
+      CSS.supports("backdrop-filter", "blur(10px)") ||
+      CSS.supports("-webkit-backdrop-filter", "blur(10px)")
     );
   };
 
   const getContainerStyles = () => {
     const baseStyles = {
       ...style,
-      width: typeof width === 'number' ? `${width}px` : width,
-      height: typeof height === 'number' ? `${height}px` : height,
+      width: typeof width === "number" ? `${width}px` : width,
+      height: typeof height === "number" ? `${height}px` : height,
       borderRadius: `${borderRadius}px`,
-      '--glass-frost': backgroundOpacity,
-      '--glass-saturation': saturation,
+      "--glass-frost": backgroundOpacity,
+      "--glass-saturation": saturation,
     };
 
     const backdropFilterSupported = forceBackdrop || supportsBackdropFilter();
@@ -252,7 +259,7 @@ const GlassSurface = ({
           return {
             ...baseStyles,
             background: `rgba(255, 255, 255, ${Math.max(bgOpacityForRender, 0.04)})`,
-            border: '1px solid rgba(255, 255, 255, 0.15)',
+            border: "1px solid rgba(255, 255, 255, 0.15)",
             boxShadow: `inset 0 1px 0 0 rgba(255, 255, 255, 0.2),
                         inset 0 -1px 0 0 rgba(255, 255, 255, 0.1),
                         0px 4px 16px rgba(0, 0, 0, 0.3)`,
@@ -263,7 +270,7 @@ const GlassSurface = ({
             background: `rgba(255, 255, 255, ${bgOpacityForRender})`,
             backdropFilter: `blur(${blur}px) saturate(${saturation}) brightness(1.1)`,
             WebkitBackdropFilter: `blur(${blur}px) saturate(${saturation}) brightness(1.1)`,
-            border: '1px solid rgba(255, 255, 255, 0.15)',
+            border: "1px solid rgba(255, 255, 255, 0.15)",
             boxShadow: `inset 0 1px 0 0 rgba(255, 255, 255, 0.2),
                         inset 0 -1px 0 0 rgba(255, 255, 255, 0.1),
                         0px 4px 16px rgba(0, 0, 0, 0.3)`,
@@ -273,18 +280,18 @@ const GlassSurface = ({
         if (!backdropFilterSupported) {
           return {
             ...baseStyles,
-            background: 'rgba(255, 255, 255, 0.4)',
-            border: '1px solid rgba(255, 255, 255, 0.3)',
+            background: "rgba(255, 255, 255, 0.4)",
+            border: "1px solid rgba(255, 255, 255, 0.3)",
             boxShadow: `inset 0 1px 0 0 rgba(255, 255, 255, 0.5),
                         inset 0 -1px 0 0 rgba(255, 255, 255, 0.3)`,
           };
         } else {
           return {
             ...baseStyles,
-            background: 'rgba(255, 255, 255, 0.25)',
-            backdropFilter: 'blur(12px) saturate(1.8) brightness(1.1)',
-            WebkitBackdropFilter: 'blur(12px) saturate(1.8) brightness(1.1)',
-            border: '1px solid rgba(255, 255, 255, 0.3)',
+            background: "rgba(255, 255, 255, 0.25)",
+            backdropFilter: "blur(12px) saturate(1.8) brightness(1.1)",
+            WebkitBackdropFilter: "blur(12px) saturate(1.8) brightness(1.1)",
+            border: "1px solid rgba(255, 255, 255, 0.3)",
             boxShadow: `0 8px 32px 0 rgba(31, 38, 135, 0.2),
                         0 2px 16px 0 rgba(31, 38, 135, 0.1),
                         inset 0 1px 0 0 rgba(255, 255, 255, 0.4),
@@ -296,21 +303,21 @@ const GlassSurface = ({
   };
 
   const glassSurfaceClasses =
-    'gd-glass relative isolate flex items-center justify-center overflow-hidden transition-opacity duration-[260ms] ease-out';
+    "gd-glass relative isolate flex items-center justify-center overflow-hidden transition-opacity duration-[260ms] ease-out";
 
   const focusVisibleClasses = isDarkMode
-    ? 'focus-visible:outline-2 focus-visible:outline-[#0A84FF] focus-visible:outline-offset-2'
-    : 'focus-visible:outline-2 focus-visible:outline-[#007AFF] focus-visible:outline-offset-2';
+    ? "focus-visible:outline-2 focus-visible:outline-[#0A84FF] focus-visible:outline-offset-2"
+    : "focus-visible:outline-2 focus-visible:outline-[#007AFF] focus-visible:outline-offset-2";
 
   return (
     <div
       ref={containerRef}
-      data-force-backdrop={forceBackdrop ? 'true' : 'false'}
-      className={`${glassSurfaceClasses} ${polish ? 'polished' : ''} ${forceBackdrop ? 'gd-force-reset' : ''} ${focusVisibleClasses} ${className}`}
+      data-force-backdrop={forceBackdrop ? "true" : "false"}
+      className={`${glassSurfaceClasses} ${polish ? "polished" : ""} ${forceBackdrop ? "gd-force-reset" : ""} ${focusVisibleClasses} ${className}`}
       style={{
         ...getContainerStyles(),
         // expose the backdrop for the CSS helper to read and apply
-        '--gd-backdrop': `blur(${blur}px) saturate(${saturation})`,
+        "--gd-backdrop": `blur(${blur}px) saturate(${saturation})`,
       }}
     >
       {polish && <div className="gd-sheen" aria-hidden="true" />}
@@ -321,7 +328,7 @@ const GlassSurface = ({
             className="pointer-events-none absolute inset-0 rounded-[inherit]"
             style={{
               background:
-                'radial-gradient(140% 120% at 20% 0%, rgba(255, 255, 255, 0.35), transparent 60%)',
+                "radial-gradient(140% 120% at 20% 0%, rgba(255, 255, 255, 0.35), transparent 60%)",
               opacity: highlightOpacity,
             }}
           />
@@ -409,7 +416,11 @@ const GlassSurface = ({
 
             <feBlend in="red" in2="green" mode="screen" result="rg" />
             <feBlend in="rg" in2="blue" mode="screen" result="output" />
-            <feGaussianBlur ref={gaussianBlurRef} in="output" stdDeviation="0.7" />
+            <feGaussianBlur
+              ref={gaussianBlurRef}
+              in="output"
+              stdDeviation="0.7"
+            />
           </filter>
         </defs>
       </svg>

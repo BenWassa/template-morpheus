@@ -1,5 +1,5 @@
-import { useEffect, useState, useRef, useId } from 'react';
-import './GlassSurfaceReactBits.css';
+import { useEffect, useState, useRef, useId } from "react";
+import "./GlassSurfaceReactBits.css";
 
 const GlassSurfaceReactBits = ({
   children,
@@ -17,13 +17,13 @@ const GlassSurfaceReactBits = ({
   redOffset = 0,
   greenOffset = 10,
   blueOffset = 20,
-  xChannel = 'R',
-  yChannel = 'G',
-  mixBlendMode = 'difference',
-  className = '',
+  xChannel = "R",
+  yChannel = "G",
+  mixBlendMode = "difference",
+  className = "",
   style = {},
 }) => {
-  const uniqueId = useId().replace(/:/g, '-');
+  const uniqueId = useId().replace(/:/g, "-");
   const filterId = `glass-filter-${uniqueId}`;
   const redGradId = `red-grad-${uniqueId}`;
   const blueGradId = `blue-grad-${uniqueId}`;
@@ -66,7 +66,7 @@ const GlassSurfaceReactBits = ({
   };
 
   const updateDisplacementMap = () => {
-    feImageRef.current?.setAttribute('href', generateDisplacementMap());
+    feImageRef.current?.setAttribute("href", generateDisplacementMap());
   };
 
   useEffect(() => {
@@ -77,13 +77,16 @@ const GlassSurfaceReactBits = ({
       { ref: blueChannelRef, offset: blueOffset },
     ].forEach(({ ref, offset }) => {
       if (ref.current) {
-        ref.current.setAttribute('scale', (distortionScale + offset).toString());
-        ref.current.setAttribute('xChannelSelector', xChannel);
-        ref.current.setAttribute('yChannelSelector', yChannel);
+        ref.current.setAttribute(
+          "scale",
+          (distortionScale + offset).toString(),
+        );
+        ref.current.setAttribute("xChannelSelector", xChannel);
+        ref.current.setAttribute("yChannelSelector", yChannel);
       }
     });
 
-    gaussianBlurRef.current?.setAttribute('stdDeviation', displace.toString());
+    gaussianBlurRef.current?.setAttribute("stdDeviation", displace.toString());
   }, [
     width,
     height,
@@ -111,37 +114,38 @@ const GlassSurfaceReactBits = ({
   }, []);
 
   const supportsSVGFilters = () => {
-    if (typeof window === 'undefined' || typeof document === 'undefined') {
+    if (typeof window === "undefined" || typeof document === "undefined") {
       return false;
     }
 
-    const isWebkit = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+    const isWebkit =
+      /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
     const isFirefox = /Firefox/.test(navigator.userAgent);
 
     if (isWebkit || isFirefox) {
       return false;
     }
 
-    const div = document.createElement('div');
+    const div = document.createElement("div");
     div.style.backdropFilter = `url(#${filterId})`;
 
-    return div.style.backdropFilter !== '';
+    return div.style.backdropFilter !== "";
   };
 
   const containerStyle = {
     ...style,
-    width: typeof width === 'number' ? `${width}px` : width,
-    height: typeof height === 'number' ? `${height}px` : height,
+    width: typeof width === "number" ? `${width}px` : width,
+    height: typeof height === "number" ? `${height}px` : height,
     borderRadius: `${borderRadius}px`,
-    '--glass-frost': backgroundOpacity,
-    '--glass-saturation': saturation,
-    '--filter-id': `url(#${filterId})`,
+    "--glass-frost": backgroundOpacity,
+    "--glass-saturation": saturation,
+    "--filter-id": `url(#${filterId})`,
   };
 
   return (
     <div
       ref={containerRef}
-      className={`glass-surface ${svgSupported ? 'glass-surface--svg' : 'glass-surface--fallback'} ${className} gd-force-reset`}
+      className={`glass-surface ${svgSupported ? "glass-surface--svg" : "glass-surface--fallback"} ${className} gd-force-reset`}
       style={containerStyle}
     >
       <svg className="glass-surface__filter" xmlns="http://www.w3.org/2000/svg">
@@ -217,7 +221,11 @@ const GlassSurfaceReactBits = ({
 
             <feBlend in="red" in2="green" mode="screen" result="rg" />
             <feBlend in="rg" in2="blue" mode="screen" result="output" />
-            <feGaussianBlur ref={gaussianBlurRef} in="output" stdDeviation="0.7" />
+            <feGaussianBlur
+              ref={gaussianBlurRef}
+              in="output"
+              stdDeviation="0.7"
+            />
           </filter>
         </defs>
       </svg>

@@ -26,6 +26,7 @@ This repository is a template derived from the original "Project Morpheus - Drea
 ## Getting Started
 
 1. **Clone and install**:
+
    ```bash
    git clone <repo-url>
    cd template-morpheus
@@ -33,12 +34,15 @@ This repository is a template derived from the original "Project Morpheus - Drea
    ```
 
 2. **Development**:
+
    ```bash
    npm run dev
    ```
+
    Opens at `http://localhost:5173`
 
 3. **Build for production**:
+
    ```bash
    npm run build
    ```
@@ -51,7 +55,7 @@ This repository is a template derived from the original "Project Morpheus - Drea
 
 ## Project Structure
 
-```
+````
 src/
   ├── App.jsx              - Main application component
   ├── main.jsx             - Entry point
@@ -75,7 +79,7 @@ docs/                       - Built output (GitHub Pages)
 1. **Update Base Path**: In `vite.config.js`, change the `base` to match your repository name:
    ```javascript
    base: '/your-repo-name/',
-   ```
+````
 
 2. **Enable GitHub Pages**: Go to repository Settings → Pages → Source → "Deploy from a branch" → Branch "main" → Folder "/docs"
 
@@ -86,7 +90,8 @@ docs/                       - Built output (GitHub Pages)
    ```
 
 The app will be available at `https://yourusername.github.io/your-repo-name/`
-```
+
+````
 
 ## Component Highlights
 
@@ -104,21 +109,21 @@ To regenerate app icons from source (macOS):
 
 ```bash
 npm run icons:generate
-```
+````
 
 Requires source at `src/assets/app-icon-source.png` (recommended: 1024×1024)
 
 ## Scripts
 
-| Command | Purpose |
-|---------|---------|
-| `npm run dev` | Start development server |
-| `npm run build` | Production build |
-| `npm run preview` | Preview production build locally |
-| `npm run lint` | ESLint check |
-| `npm run format` | Prettier formatting |
-| `npm run check` | Lint + build check |
-| `npm run icons:generate` | Regenerate app icons |
+| Command                  | Purpose                          |
+| ------------------------ | -------------------------------- |
+| `npm run dev`            | Start development server         |
+| `npm run build`          | Production build                 |
+| `npm run preview`        | Preview production build locally |
+| `npm run lint`           | ESLint check                     |
+| `npm run format`         | Prettier formatting              |
+| `npm run check`          | Lint + build check               |
+| `npm run icons:generate` | Regenerate app icons             |
 
 ## Version
 

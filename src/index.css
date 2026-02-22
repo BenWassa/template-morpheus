@@ -10,16 +10,28 @@ body {
 .dream-bg {
   background-color: #0a0f1c;
   background-image:
-    radial-gradient(800px circle at 12% 12%, rgba(76, 129, 255, 0.22), transparent 55%),
-    radial-gradient(700px circle at 88% 20%, rgba(34, 211, 238, 0.18), transparent 60%),
-    radial-gradient(900px circle at 70% 85%, rgba(168, 85, 247, 0.16), transparent 60%);
+    radial-gradient(
+      800px circle at 12% 12%,
+      rgba(76, 129, 255, 0.22),
+      transparent 55%
+    ),
+    radial-gradient(
+      700px circle at 88% 20%,
+      rgba(34, 211, 238, 0.18),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px circle at 70% 85%,
+      rgba(168, 85, 247, 0.16),
+      transparent 60%
+    );
   background-repeat: no-repeat;
   background-size: cover;
 }
 
 /* Fixed viewport background gradients (won't move with page content) */
 body::before {
-  content: '';
+  content: "";
   position: fixed;
   top: 0;
   left: 0;
@@ -85,18 +97,22 @@ body::before {
   position: relative;
 }
 
-.gd-glass[data-force-backdrop='true'] {
+.gd-glass[data-force-backdrop="true"] {
   -webkit-backdrop-filter: var(--gd-backdrop, blur(12px) saturate(1.4));
   backdrop-filter: var(--gd-backdrop, blur(12px) saturate(1.4));
 }
 
 .gd-glass::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.06),
+    rgba(255, 255, 255, 0.02)
+  );
   mix-blend-mode: overlay;
 }
 
@@ -131,15 +147,23 @@ body::before {
 }
 
 .gd-glass.polished::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
   background-image:
-    radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.02) 0%, transparent 20%),
+    radial-gradient(
+      circle at 10% 20%,
+      rgba(255, 255, 255, 0.02) 0%,
+      transparent 20%
+    ),
     radial-gradient(circle at 80% 80%, rgba(0, 0, 0, 0.02) 0%, transparent 20%),
-    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.002) 0 1px, transparent 1px 3px);
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.002) 0 1px,
+      transparent 1px 3px
+    );
   opacity: var(--gd-noise-opacity);
   mix-blend-mode: overlay;
   will-change: opacity, transform;
@@ -192,9 +216,21 @@ body::before {
 /* ReactBits-like backdrop: layered radial gradients and subtle noise */
 .glass-demo__backdrop--reactbits {
   background-image:
-    radial-gradient(600px circle at 12% 12%, rgba(84, 104, 255, 0.22), transparent 35%),
-    radial-gradient(500px circle at 88% 20%, rgba(34, 211, 238, 0.18), transparent 40%),
-    radial-gradient(700px circle at 70% 85%, rgba(168, 85, 247, 0.14), transparent 50%),
+    radial-gradient(
+      600px circle at 12% 12%,
+      rgba(84, 104, 255, 0.22),
+      transparent 35%
+    ),
+    radial-gradient(
+      500px circle at 88% 20%,
+      rgba(34, 211, 238, 0.18),
+      transparent 40%
+    ),
+    radial-gradient(
+      700px circle at 70% 85%,
+      rgba(168, 85, 247, 0.14),
+      transparent 50%
+    ),
     linear-gradient(180deg, rgba(10, 11, 20, 0.55), rgba(10, 11, 20, 0.35));
   background-size: cover;
   filter: saturate(1.05) contrast(1.02);
@@ -204,8 +240,16 @@ body::before {
 /* Lighter backdrop for other demo stripes */
 .glass-demo__backdrop--soft {
   background-image:
-    radial-gradient(400px circle at 15% 10%, rgba(168, 85, 247, 0.08), transparent 40%),
-    radial-gradient(500px circle at 80% 20%, rgba(76, 129, 255, 0.06), transparent 45%);
+    radial-gradient(
+      400px circle at 15% 10%,
+      rgba(168, 85, 247, 0.08),
+      transparent 40%
+    ),
+    radial-gradient(
+      500px circle at 80% 20%,
+      rgba(76, 129, 255, 0.06),
+      transparent 45%
+    );
   opacity: 0.9;
 }
 

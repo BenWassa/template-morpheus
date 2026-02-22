@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import JSZip from 'jszip';
-import { saveAs } from 'file-saver';
+import React, { useState, useEffect } from "react";
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
 import {
   Plus,
   X,
@@ -14,23 +14,23 @@ import {
   Calendar,
   ArrowRight,
   CheckCircle,
-} from 'lucide-react';
-import GooeyNav from './component/GooeyNav';
-import GlassSurface from './component/GlassSurface';
-import GlassSurfaceReactBits from './component/GlassSurfaceReactBits';
-import GlassSurfaceDemo from './component/GlassSurfaceDemo';
+} from "lucide-react";
+import GooeyNav from "./component/GooeyNav";
+import GlassSurface from "./component/GlassSurface";
+import GlassSurfaceReactBits from "./component/GlassSurfaceReactBits";
+import GlassSurfaceDemo from "./component/GlassSurfaceDemo";
 
 // Set to true to enable the development demo page.
 // In professional builds, you can toggle this via VITE_SHOW_DEMO=true in .env
-const SHOW_DEMO = import.meta.env.VITE_SHOW_DEMO === 'true' || false;
+const SHOW_DEMO = import.meta.env.VITE_SHOW_DEMO === "true" || false;
 
 const FALLBACK_IMAGE =
-  'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjQ1MCIgdmlld0JveD0iMCAwIDgwMCA0NTAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzBmMTcyYSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMyMTMzNDciLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iNDUwIiBmaWxsPSJ1cmwoI2cpIi8+CiAgPGNpcmNsZSBjeD0iNjAwIiBjeT0iMTAwIiByPSIxNTAiIGZpbGw9IiMyMTM5NjEiIG9wYWNpdHk9IjAuNSIvPgogIDxjaXJjbGUgY3g9IjIwMCIgY3k9IjM1MCIgcj0iMTgwIiBmaWxsPSIjMWIxODJlIiBvcGFjaXR5PSIwLjciLz4KPC9zdmc+';
+  "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjQ1MCIgdmlld0JveD0iMCAwIDgwMCA0NTAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzBmMTcyYSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMyMTMzNDciLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iNDUwIiBmaWxsPSJ1cmwoI2cpIi8+CiAgPGNpcmNsZSBjeD0iNjAwIiBjeT0iMTAwIiByPSIxNTAiIGZpbGw9IiMyMTM5NjEiIG9wYWNpdHk9IjAuNSIvPgogIDxjaXJjbGUgY3g9IjIwMCIgY3k9IjM1MCIgcj0iMTgwIiBmaWxsPSIjMWIxODJlIiBvcGFjaXR5PSIwLjciLz4KPC9zdmc+";
 
 /* --- UTILITIES --- */
 const truncateText = (text, maxLength) => {
   if (!text || text.length <= maxLength) return text;
-  return text.substring(0, maxLength).trim() + '...';
+  return text.substring(0, maxLength).trim() + "...";
 };
 
 /* --- UI COMPONENTS --- */
@@ -56,7 +56,9 @@ const SmartImage = ({ src, alt, className }) => (
 const Toast = ({ isVisible, message }) => (
   <div
     className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-[9999] transition-all duration-300 ease-out ${
-      isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
+      isVisible
+        ? "opacity-100 translate-y-0"
+        : "opacity-0 translate-y-4 pointer-events-none"
     }`}
   >
     <div className="bg-[#131b2e]/95 backdrop-blur-xl border border-cyan-400/30 rounded-xl px-6 py-4 flex items-center gap-3 shadow-2xl shadow-cyan-500/10">
@@ -70,30 +72,30 @@ const Toast = ({ isVisible, message }) => (
 const Header = ({ currentView, setCurrentView }) => {
   const navItems = [
     {
-      label: 'ARCHIVE',
-      href: '#',
+      label: "ARCHIVE",
+      href: "#",
       icon: <Moon size={14} />,
       onClick: (e) => {
         e.preventDefault();
-        setCurrentView('gallery');
+        setCurrentView("gallery");
       },
     },
     {
-      label: 'NEW ENTRY',
-      href: '#',
+      label: "NEW ENTRY",
+      href: "#",
       icon: <Plus size={14} />,
       onClick: (e) => {
         e.preventDefault();
-        setCurrentView('add');
+        setCurrentView("add");
       },
     },
     SHOW_DEMO && {
-      label: 'DEMO',
-      href: '#',
+      label: "DEMO",
+      href: "#",
       icon: <Sparkles size={14} />,
       onClick: (e) => {
         e.preventDefault();
-        setCurrentView('demo');
+        setCurrentView("demo");
       },
     },
   ].filter(Boolean);
@@ -106,7 +108,7 @@ const Header = ({ currentView, setCurrentView }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
         <div
           className="flex items-center gap-2 sm:gap-4 cursor-pointer group"
-          onClick={() => setCurrentView('gallery')}
+          onClick={() => setCurrentView("gallery")}
         >
           <div className="relative">
             <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gradient-to-tr from-purple-500 to-cyan-400 blur-sm opacity-70 group-hover:opacity-100 transition-opacity"></div>
@@ -145,13 +147,13 @@ const RawTranscriptViewer = ({ text }) => {
       >
         <div
           className={`p-1.5 sm:p-2 rounded-full border border-current transition-all ${
-            isOpen ? 'rotate-180' : ''
+            isOpen ? "rotate-180" : ""
           }`}
         >
           <ChevronDown size={14} className="sm:w-4 sm:h-4" />
         </div>
         <span className="font-mono uppercase tracking-wide sm:tracking-widest text-[10px] sm:text-xs flex-1 text-left">
-          {isOpen ? 'Hide Raw Transcription' : 'View Raw Transcription'}
+          {isOpen ? "Hide Raw Transcription" : "View Raw Transcription"}
         </span>
         <div className="hidden sm:block h-px bg-white/10 flex-1 group-hover:bg-cyan-900/50 transition-colors"></div>
       </button>
@@ -184,7 +186,9 @@ const FragmentCard = ({ text, index }) => (
       <div className="relative h-full w-full flex flex-col p-6">
         <div className="flex justify-between items-start mb-4">
           <Sparkles size={16} className="text-cyan-400 opacity-70" />
-          <span className="text-[10px] font-mono text-slate-600">FRAG_0{index + 1}</span>
+          <span className="text-[10px] font-mono text-slate-600">
+            FRAG_0{index + 1}
+          </span>
         </div>
         <p className="text-slate-300 text-sm leading-relaxed font-light italic font-serif">
           "{text}"
@@ -200,7 +204,7 @@ const GalleryView = () => {
   const [loading, setLoading] = useState(true);
   const [selectedEntry, setSelectedEntry] = useState(null);
   // For dev: fetch from /public/entries, for prod: use BASE_URL
-  const baseUrl = import.meta.env.DEV ? '/' : import.meta.env.BASE_URL || '/';
+  const baseUrl = import.meta.env.DEV ? "/" : import.meta.env.BASE_URL || "/";
 
   useEffect(() => {
     loadEntries();
@@ -210,14 +214,17 @@ const GalleryView = () => {
     try {
       // Add a cache-busting timestamp to ensure we always get the latest entry list
       const indexUrl = `${baseUrl}index.json?v=${Date.now()}`;
-      console.log('Fetching index from:', indexUrl);
+      console.log("Fetching index from:", indexUrl);
       const indexResponse = await fetch(indexUrl);
-      if (!indexResponse.ok) throw new Error(`Could not load index: ${indexResponse.status} ${indexResponse.statusText}`);
+      if (!indexResponse.ok)
+        throw new Error(
+          `Could not load index: ${indexResponse.status} ${indexResponse.statusText}`,
+        );
 
       const indexText = await indexResponse.text();
-      console.log('Index response text:', indexText);
-      if (!indexText || indexText.trim() === '') {
-        throw new Error('Index response is empty');
+      console.log("Index response text:", indexText);
+      if (!indexText || indexText.trim() === "") {
+        throw new Error("Index response is empty");
       }
       const indexData = JSON.parse(indexText);
       const loadedEntries = [];
@@ -225,19 +232,21 @@ const GalleryView = () => {
       for (const id of indexData.entries) {
         try {
           const entryUrl = `${baseUrl}entries/${id}.json?v=${Date.now()}`;
-          console.log('Fetching entry from:', entryUrl);
+          console.log("Fetching entry from:", entryUrl);
           const res = await fetch(entryUrl);
           if (res.ok) {
             const entryText = await res.text();
             console.log(`Entry ${id} response text length:`, entryText.length);
-            if (!entryText || entryText.trim() === '') {
+            if (!entryText || entryText.trim() === "") {
               console.warn(`Entry ${id} response is empty`);
               continue;
             }
             const data = JSON.parse(entryText);
             loadedEntries.push(data);
           } else {
-            console.warn(`Failed to load entry ${id}: ${res.status} ${res.statusText}`);
+            console.warn(
+              `Failed to load entry ${id}: ${res.status} ${res.statusText}`,
+            );
           }
         } catch (e) {
           console.warn(`Error loading entry ${id}:`, e);
@@ -247,7 +256,7 @@ const GalleryView = () => {
       loadedEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
       setEntries(loadedEntries);
     } catch (err) {
-      console.error('Error loading entries:', err);
+      console.error("Error loading entries:", err);
     } finally {
       setLoading(false);
     }
@@ -309,7 +318,10 @@ const GalleryView = () => {
                   <div className="space-y-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
                     <div className="flex flex-wrap gap-2">
                       {entry.keywords?.slice(0, 3).map((k, j) => (
-                        <span key={j} className="text-[10px] text-slate-400 font-mono">
+                        <span
+                          key={j}
+                          className="text-[10px] text-slate-400 font-mono"
+                        >
                           #{k}
                         </span>
                       ))}
@@ -347,7 +359,10 @@ const GalleryView = () => {
                 onClick={() => setSelectedEntry(null)}
                 className="group p-2 sm:p-3 rounded-full hover:bg-white/5 transition-colors border border-transparent hover:border-white/10"
               >
-                <X size={20} className="text-slate-400 group-hover:text-white transition-colors" />
+                <X
+                  size={20}
+                  className="text-slate-400 group-hover:text-white transition-colors"
+                />
               </button>
             </div>
 
@@ -371,7 +386,7 @@ const GalleryView = () => {
 
                 <div className="relative pl-0 md:pl-8 border-l-0 md:border-l border-white/5 space-y-16 sm:space-y-24">
                   {selectedEntry.scenes?.map((scene, idx) => {
-                    const sceneNumber = String(idx + 1).padStart(2, '0');
+                    const sceneNumber = String(idx + 1).padStart(2, "0");
                     const hasImage = Boolean(scene.image);
 
                     return (
@@ -381,7 +396,7 @@ const GalleryView = () => {
                         </div>
 
                         <div
-                          className={`grid grid-cols-1 ${hasImage ? 'md:grid-cols-2' : ''} gap-8 md:gap-12 items-start`}
+                          className={`grid grid-cols-1 ${hasImage ? "md:grid-cols-2" : ""} gap-8 md:gap-12 items-start`}
                         >
                           <div className="space-y-4 sm:space-y-6">
                             <div className="flex items-center gap-3 text-purple-400/80">
@@ -423,7 +438,9 @@ const GalleryView = () => {
                     </div>
                     <div className="relative z-10">
                       <div className="flex items-end gap-4 mb-12 border-b border-white/5 pb-4">
-                        <h3 className="font-display text-3xl text-white">Memory Fragments</h3>
+                        <h3 className="font-display text-3xl text-white">
+                          Memory Fragments
+                        </h3>
                         <span className="text-slate-500 font-mono text-xs pb-1">
                           Unsorted data shards
                         </span>
@@ -437,7 +454,9 @@ const GalleryView = () => {
                   </div>
                 )}
 
-                <RawTranscriptViewer text={selectedEntry.originalTranscription} />
+                <RawTranscriptViewer
+                  text={selectedEntry.originalTranscription}
+                />
 
                 <div className="h-24"></div>
               </div>
@@ -451,18 +470,18 @@ const GalleryView = () => {
 
 /* --- ADD ENTRY FORM (UI Update) --- */
 const AddEntryForm = () => {
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
-  const [jsonText, setJsonText] = useState('');
+  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+  const [jsonText, setJsonText] = useState("");
   const [isParsed, setIsParsed] = useState(false);
   const [formData, setFormData] = useState({
-    originalTranscription: '',
-    summary: '',
-    keywords: '',
+    originalTranscription: "",
+    summary: "",
+    keywords: "",
     scenes: [],
-    fragments: '',
+    fragments: "",
   });
   const [scenes, setScenes] = useState([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [showToastNotification, setShowToastNotification] = useState(false);
 
   const showToast = (message) => {
@@ -479,24 +498,29 @@ const AddEntryForm = () => {
 
       // DEV-time sanity check to catch accidental truncation upstream
       if (import.meta.env.DEV) {
-        if (typeof parsed.summary === 'string' && parsed.summary.endsWith('...')) {
+        if (
+          typeof parsed.summary === "string" &&
+          parsed.summary.endsWith("...")
+        ) {
           console.warn(
-            'parseJson: parsed.summary appears truncated — ensure the AI returns full text'
+            "parseJson: parsed.summary appears truncated — ensure the AI returns full text",
           );
         }
       }
       setFormData({
-        originalTranscription: parsed.originalTranscription || '',
-        summary: parsed.summary || '',
+        originalTranscription: parsed.originalTranscription || "",
+        summary: parsed.summary || "",
         keywords: Array.isArray(parsed.keywords)
-          ? parsed.keywords.join(', ')
-          : parsed.keywords || '',
+          ? parsed.keywords.join(", ")
+          : parsed.keywords || "",
         scenes: parsed.scenes || [],
-        fragments: Array.isArray(parsed.fragments) ? parsed.fragments.join('\n') : parsed.fragments,
+        fragments: Array.isArray(parsed.fragments)
+          ? parsed.fragments.join("\n")
+          : parsed.fragments,
       });
 
       const newScenes = (parsed.scenes || []).map((text) => ({
-        text: typeof text === 'string' ? text : text.text,
+        text: typeof text === "string" ? text : text.text,
         image: null,
         preview: null,
       }));
@@ -504,9 +528,9 @@ const AddEntryForm = () => {
 
       if (parsed.date) setDate(parsed.date);
       setIsParsed(true);
-      setError('');
+      setError("");
     } catch (e) {
-      setError('Invalid JSON format. Please check your input.');
+      setError("Invalid JSON format. Please check your input.");
     }
   };
 
@@ -556,16 +580,16 @@ Return only well-formed JSON that strictly follows the schema and constraints ab
 
     try {
       await navigator.clipboard.writeText(prompt);
-      showToast('System prompt copied to clipboard!');
+      showToast("System prompt copied to clipboard!");
     } catch (err) {
-      console.error('Failed to copy prompt:', err);
-      const textArea = document.createElement('textarea');
+      console.error("Failed to copy prompt:", err);
+      const textArea = document.createElement("textarea");
       textArea.value = prompt;
       document.body.appendChild(textArea);
       textArea.select();
-      document.execCommand('copy');
+      document.execCommand("copy");
       document.body.removeChild(textArea);
-      showToast('System prompt copied to clipboard!');
+      showToast("System prompt copied to clipboard!");
     }
   };
 
@@ -575,7 +599,11 @@ Return only well-formed JSON that strictly follows the schema and constraints ab
       const reader = new FileReader();
       reader.onload = (event) => {
         const updated = [...scenes];
-        updated[index] = { ...updated[index], image: file, preview: event.target.result };
+        updated[index] = {
+          ...updated[index],
+          image: file,
+          preview: event.target.result,
+        };
         setScenes(updated);
       };
       reader.readAsDataURL(file);
@@ -588,7 +616,7 @@ Return only well-formed JSON that strictly follows the schema and constraints ab
       reader.onload = (e) => {
         const img = new Image();
         img.onload = () => {
-          const canvas = document.createElement('canvas');
+          const canvas = document.createElement("canvas");
           const maxHeight = 500;
           let width = img.width;
           let height = img.height;
@@ -600,10 +628,10 @@ Return only well-formed JSON that strictly follows the schema and constraints ab
 
           canvas.width = width;
           canvas.height = height;
-          const ctx = canvas.getContext('2d');
+          const ctx = canvas.getContext("2d");
           ctx.drawImage(img, 0, 0, width, height);
 
-          canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 1.0);
+          canvas.toBlob((blob) => resolve(blob), "image/jpeg", 1.0);
         };
         img.src = e.target.result;
       };
@@ -617,11 +645,13 @@ Return only well-formed JSON that strictly follows the schema and constraints ab
     const finalData = {
       date,
       ...formData,
-      keywords: formData.keywords.split(',').map((k) => k.trim()),
-      fragments: formData.fragments.split('\n').filter((f) => f.trim()),
+      keywords: formData.keywords.split(",").map((k) => k.trim()),
+      fragments: formData.fragments.split("\n").filter((f) => f.trim()),
       scenes: scenes.map((s, i) => ({
         text: s.text,
-        image: s.image ? `images/${date}-${String(i + 1).padStart(2, '0')}.jpg` : null,
+        image: s.image
+          ? `images/${date}-${String(i + 1).padStart(2, "0")}.jpg`
+          : null,
       })),
     };
 
@@ -630,12 +660,12 @@ Return only well-formed JSON that strictly follows the schema and constraints ab
     for (let i = 0; i < scenes.length; i++) {
       if (scenes[i].image) {
         const resizedBlob = await resizeImage(scenes[i].image);
-        const filename = `images/${date}-${String(i + 1).padStart(2, '0')}.jpg`;
+        const filename = `images/${date}-${String(i + 1).padStart(2, "0")}.jpg`;
         zip.file(filename, resizedBlob);
       }
     }
 
-    const content = await zip.generateAsync({ type: 'blob' });
+    const content = await zip.generateAsync({ type: "blob" });
     saveAs(content, `dream-${date}.zip`);
   };
 
@@ -698,21 +728,23 @@ Return only well-formed JSON that strictly follows the schema and constraints ab
         <div className="space-y-8 animate-fade-in">
           <div className="bg-[#131b2e] border border-white/5 rounded-2xl p-8">
             <div className="flex justify-between items-center mb-8 pb-8 border-b border-white/5">
-              <h3 className="text-xl text-white font-display">Review & Assets</h3>
+              <h3 className="text-xl text-white font-display">
+                Review & Assets
+              </h3>
               <button
                 onClick={() => {
                   setIsParsed(false);
-                  setJsonText('');
-                  setDate(new Date().toISOString().split('T')[0]);
+                  setJsonText("");
+                  setDate(new Date().toISOString().split("T")[0]);
                   setFormData({
-                    originalTranscription: '',
-                    summary: '',
-                    keywords: '',
+                    originalTranscription: "",
+                    summary: "",
+                    keywords: "",
                     scenes: [],
-                    fragments: '',
+                    fragments: "",
                   });
                   setScenes([]);
-                  setError('');
+                  setError("");
                 }}
                 className="text-xs text-slate-500 hover:text-red-400 uppercase tracking-widest transition-colors"
               >
@@ -727,7 +759,10 @@ Return only well-formed JSON that strictly follows the schema and constraints ab
                     Dream Date
                   </label>
                   <div className="relative">
-                    <Calendar size={16} className="absolute left-4 top-3.5 text-slate-500" />
+                    <Calendar
+                      size={16}
+                      className="absolute left-4 top-3.5 text-slate-500"
+                    />
                     <input
                       type="date"
                       value={date}
@@ -770,11 +805,16 @@ Return only well-formed JSON that strictly follows the schema and constraints ab
                       <div className="flex-shrink-0">
                         <label className="cursor-pointer group relative block h-24 w-24 rounded-lg overflow-hidden bg-white/5 border border-white/10 hover:border-purple-500/50 transition-all">
                           {scene.preview ? (
-                            <img src={scene.preview} className="h-full w-full object-cover" />
+                            <img
+                              src={scene.preview}
+                              className="h-full w-full object-cover"
+                            />
                           ) : (
                             <div className="h-full w-full flex flex-col items-center justify-center text-slate-600 group-hover:text-purple-400 transition-colors">
                               <ImageIcon size={20} className="mb-1" />
-                              <span className="text-[9px] uppercase">Upload</span>
+                              <span className="text-[9px] uppercase">
+                                Upload
+                              </span>
                             </div>
                           )}
                           <input
@@ -798,21 +838,25 @@ Return only well-formed JSON that strictly follows the schema and constraints ab
                   Download Entry Bundle
                 </button>
                 <p className="text-center text-slate-500 text-xs mt-4">
-                  Extract the zip to your project root. Add the entry ID to index.json manually.
+                  Extract the zip to your project root. Add the entry ID to
+                  index.json manually.
                 </p>
               </div>
             </div>
           </div>
         </div>
       )}
-      <Toast isVisible={showToastNotification} message={showToastNotification} />
+      <Toast
+        isVisible={showToastNotification}
+        message={showToastNotification}
+      />
     </div>
   );
 };
 
 /* --- MAIN APP --- */
 function App() {
-  const [currentView, setCurrentView] = useState('gallery');
+  const [currentView, setCurrentView] = useState("gallery");
 
   return (
     <div className="min-h-screen bg-[#0a0f1c] text-slate-200 font-sans selection:bg-purple-500/30 selection:text-purple-200">
@@ -820,9 +864,9 @@ function App() {
       <Header currentView={currentView} setCurrentView={setCurrentView} />
 
       <main>
-        {currentView === 'gallery' && <GalleryView />}
-        {currentView === 'add' && <AddEntryForm />}
-        {SHOW_DEMO && currentView === 'demo' && <GlassSurfaceDemo />}
+        {currentView === "gallery" && <GalleryView />}
+        {currentView === "add" && <AddEntryForm />}
+        {SHOW_DEMO && currentView === "demo" && <GlassSurfaceDemo />}
       </main>
     </div>
   );

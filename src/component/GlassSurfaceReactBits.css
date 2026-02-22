@@ -35,7 +35,8 @@
      visual result is equivalent for our theme: a translucent white base
      with inset highlights and soft shadows. */
   background: rgba(255, 255, 255, var(--glass-frost, 0));
-  backdrop-filter: var(--filter-id, url(#glass-filter)) saturate(var(--glass-saturation, 1));
+  backdrop-filter: var(--filter-id, url(#glass-filter))
+    saturate(var(--glass-saturation, 1));
   box-shadow:
     0 0 2px 1px rgba(255, 255, 255, 0.15) inset,
     0 0 10px 4px rgba(255, 255, 255, 0.08) inset,
@@ -80,7 +81,7 @@
   }
 
   .glass-surface--fallback::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     background: rgba(255, 255, 255, 0.15);

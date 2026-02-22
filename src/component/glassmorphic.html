@@ -6,8 +6,14 @@
     <title>React Bits - Glass Surface PoC</title>
 
     <!-- React & ReactDOM -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
 
     <!-- Babel for JSX -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -27,7 +33,7 @@
       }
 
       body {
-        font-family: 'Inter', sans-serif;
+        font-family: "Inter", sans-serif;
         margin: 0;
         padding: 0;
         background-color: #111;
@@ -73,7 +79,8 @@
           hsl(0 0% 100% / var(--glass-frost, 0)),
           hsl(0 0% 0% / var(--glass-frost, 0))
         );
-        backdrop-filter: var(--filter-id, url(#glass-filter)) saturate(var(--glass-saturation, 1));
+        backdrop-filter: var(--filter-id, url(#glass-filter))
+          saturate(var(--glass-saturation, 1));
         box-shadow:
           0 0 2px 1px
             light-dark(
@@ -128,7 +135,7 @@
         }
 
         .glass-surface--fallback::before {
-          content: '';
+          content: "";
           position: absolute;
           inset: 0;
           background: rgba(255, 255, 255, 0.15);
@@ -179,13 +186,13 @@
         redOffset = 0,
         greenOffset = 10,
         blueOffset = 20,
-        xChannel = 'R',
-        yChannel = 'G',
-        mixBlendMode = 'difference',
-        className = '',
+        xChannel = "R",
+        yChannel = "G",
+        mixBlendMode = "difference",
+        className = "",
         style = {},
       }) => {
-        const uniqueId = useId().replace(/:/g, '-');
+        const uniqueId = useId().replace(/:/g, "-");
         const filterId = `glass-filter-${uniqueId}`;
         const redGradId = `red-grad-${uniqueId}`;
         const blueGradId = `blue-grad-${uniqueId}`;
@@ -203,7 +210,8 @@
           const rect = containerRef.current?.getBoundingClientRect();
           const actualWidth = rect?.width || 400;
           const actualHeight = rect?.height || 200;
-          const edgeSize = Math.min(actualWidth, actualHeight) * (borderWidth * 0.5);
+          const edgeSize =
+            Math.min(actualWidth, actualHeight) * (borderWidth * 0.5);
 
           // Note: In strict React without raw-loader, we insert the SVG as a data URI
           const svgContent = `
@@ -230,7 +238,7 @@
 
         const updateDisplacementMap = () => {
           if (feImageRef.current) {
-            feImageRef.current.setAttribute('href', generateDisplacementMap());
+            feImageRef.current.setAttribute("href", generateDisplacementMap());
           }
         };
 
@@ -242,14 +250,20 @@
             { ref: blueChannelRef, offset: blueOffset },
           ].forEach(({ ref, offset }) => {
             if (ref.current) {
-              ref.current.setAttribute('scale', (distortionScale + offset).toString());
-              ref.current.setAttribute('xChannelSelector', xChannel);
-              ref.current.setAttribute('yChannelSelector', yChannel);
+              ref.current.setAttribute(
+                "scale",
+                (distortionScale + offset).toString(),
+              );
+              ref.current.setAttribute("xChannelSelector", xChannel);
+              ref.current.setAttribute("yChannelSelector", yChannel);
             }
           });
 
           if (gaussianBlurRef.current) {
-            gaussianBlurRef.current.setAttribute('stdDeviation', displace.toString());
+            gaussianBlurRef.current.setAttribute(
+              "stdDeviation",
+              displace.toString(),
+            );
           }
         }, [
           width,
@@ -289,11 +303,15 @@
         }, []);
 
         const supportsSVGFilters = () => {
-          if (typeof window === 'undefined' || typeof document === 'undefined') {
+          if (
+            typeof window === "undefined" ||
+            typeof document === "undefined"
+          ) {
             return false;
           }
           const isWebkit =
-            /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+            /Safari/.test(navigator.userAgent) &&
+            !/Chrome/.test(navigator.userAgent);
           const isFirefox = /Firefox/.test(navigator.userAgent);
 
           // Note: The original logic disables SVG filters for Webkit/Firefox due to potential bugs
@@ -302,28 +320,31 @@
             return false;
           }
 
-          const div = document.createElement('div');
+          const div = document.createElement("div");
           div.style.backdropFilter = `url(#${filterId})`;
-          return div.style.backdropFilter !== '';
+          return div.style.backdropFilter !== "";
         };
 
         const containerStyle = {
           ...style,
-          width: typeof width === 'number' ? `${width}px` : width,
-          height: typeof height === 'number' ? `${height}px` : height,
+          width: typeof width === "number" ? `${width}px` : width,
+          height: typeof height === "number" ? `${height}px` : height,
           borderRadius: `${borderRadius}px`,
-          '--glass-frost': backgroundOpacity,
-          '--glass-saturation': saturation,
-          '--filter-id': `url(#${filterId})`,
+          "--glass-frost": backgroundOpacity,
+          "--glass-saturation": saturation,
+          "--filter-id": `url(#${filterId})`,
         };
 
         return (
           <div
             ref={containerRef}
-            className={`glass-surface ${svgSupported ? 'glass-surface--svg' : 'glass-surface--fallback'} ${className}`}
+            className={`glass-surface ${svgSupported ? "glass-surface--svg" : "glass-surface--fallback"} ${className}`}
             style={containerStyle}
           >
-            <svg className="glass-surface__filter" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              className="glass-surface__filter"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <defs>
                 <filter
                   id={filterId}
@@ -396,7 +417,11 @@
 
                   <feBlend in="red" in2="green" mode="screen" result="rg" />
                   <feBlend in="rg" in2="blue" mode="screen" result="output" />
-                  <feGaussianBlur ref={gaussianBlurRef} in="output" stdDeviation="0.7" />
+                  <feGaussianBlur
+                    ref={gaussianBlurRef}
+                    in="output"
+                    stdDeviation="0.7"
+                  />
                 </filter>
               </defs>
             </svg>
@@ -411,7 +436,9 @@
           <div className="min-h-screen w-full bg-neutral-900 text-white p-8 pb-16 space-y-12">
             <header className="text-center space-y-2 mb-8">
               <h1 className="text-4xl font-bold">Glass Surface</h1>
-              <p className="text-gray-400">Proof of Concept over Real Imagery</p>
+              <p className="text-gray-400">
+                Proof of Concept over Real Imagery
+              </p>
             </header>
 
             {/* Scenario 1: City Lights - Great for Refraction */}
@@ -478,7 +505,9 @@
                       <span className="text-xs uppercase tracking-widest text-white/60 font-bold mb-1">
                         Project
                       </span>
-                      <span className="text-3xl font-bold text-white drop-shadow-sm">Aurora</span>
+                      <span className="text-3xl font-bold text-white drop-shadow-sm">
+                        Aurora
+                      </span>
                     </div>
                     <div className="text-right">
                       <span className="inline-flex items-center rounded-full bg-green-400/20 px-3 py-1 text-xs font-medium text-green-300 ring-1 ring-inset ring-green-400/30 backdrop-blur-sm">
@@ -491,13 +520,14 @@
             </div>
 
             <footer className="text-center text-gray-500 text-xs max-w-md mx-auto pt-8">
-              Images via Unsplash. Note: Use Chrome/Edge for full SVG displacement effects.
+              Images via Unsplash. Note: Use Chrome/Edge for full SVG
+              displacement effects.
             </footer>
           </div>
         );
       };
 
-      const root = ReactDOM.createRoot(document.getElementById('root'));
+      const root = ReactDOM.createRoot(document.getElementById("root"));
       root.render(<App />);
     </script>
   </body>
