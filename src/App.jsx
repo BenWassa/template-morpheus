@@ -473,6 +473,8 @@ const AddEntryForm = () => {
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [jsonText, setJsonText] = useState("");
   const [isParsed, setIsParsed] = useState(false);
+  const [isDemoMode, setIsDemoMode] = useState(false);
+  const [demoAlreadyAdded, setDemoAlreadyAdded] = useState(false);
   const [formData, setFormData] = useState({
     originalTranscription: "",
     summary: "",
@@ -484,9 +486,66 @@ const AddEntryForm = () => {
   const [error, setError] = useState("");
   const [showToastNotification, setShowToastNotification] = useState(false);
 
+  useEffect(() => {
+    // Check if demo entry has already been added
+    const demoEntry = localStorage.getItem("morpheus_demo_entry_added");
+    if (demoEntry === "2025-01-14") {
+      setDemoAlreadyAdded(true);
+    }
+  }, []);
+
   const showToast = (message) => {
     setShowToastNotification(message);
     setTimeout(() => setShowToastNotification(false), 3000);
+  };
+
+  const loadDemoJson = async () => {
+    if (demoAlreadyAdded) {
+      showToast(
+        "Demo entry already added! This is a read-only demo mode. Refresh the page to see your added dream in the gallery.",
+      );
+      return;
+    }
+
+    try {
+      const baseUrl = import.meta.env.DEV
+        ? "/"
+        : import.meta.env.BASE_URL || "/";
+      const response = await fetch(`${baseUrl}entries/2025-01-14.json`);
+      const data = await response.json();
+
+      // Load the demo data
+      setFormData({
+        originalTranscription: data.originalTranscription || "",
+        summary: data.summary || "",
+        keywords: Array.isArray(data.keywords)
+          ? data.keywords.join(", ")
+          : data.keywords || "",
+        scenes: data.scenes || [],
+        fragments: Array.isArray(data.fragments)
+          ? data.fragments.join("\n")
+          : data.fragments,
+      });
+
+      const newScenes = (data.scenes || []).map((sceneItem, idx) => ({
+        text: typeof sceneItem === "string" ? sceneItem : sceneItem.text,
+        image: null,
+        preview: data.images
+          ? `${baseUrl}images/2025-01-14-${String(idx + 1).padStart(2, "0")}.jpg`
+          : null,
+        isDemo: true,
+        demoImagePath: `images/2025-01-14-${String(idx + 1).padStart(2, "0")}.jpg`,
+      }));
+      setScenes(newScenes);
+
+      setDate(data.date);
+      setIsParsed(true);
+      setIsDemoMode(true);
+      setError("");
+    } catch (e) {
+      console.error("Failed to load demo JSON:", e);
+      showToast("Failed to load demo entry");
+    }
   };
 
   const parseJson = () => {
@@ -523,11 +582,13 @@ const AddEntryForm = () => {
         text: typeof text === "string" ? text : text.text,
         image: null,
         preview: null,
+        isDemo: false,
       }));
       setScenes(newScenes);
 
       if (parsed.date) setDate(parsed.date);
       setIsParsed(true);
+      setIsDemoMode(false);
       setError("");
     } catch (e) {
       setError("Invalid JSON format. Please check your input.");
@@ -594,6 +655,10 @@ Return only well-formed JSON that strictly follows the schema and constraints ab
   };
 
   const handleImageUpload = (index, e) => {
+    if (isDemoMode) {
+      showToast("Cannot upload images in demo mode");
+      return;
+    }
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -709,6 +774,21 @@ Return only well-formed JSON that strictly follows the schema and constraints ab
                   width="auto"
                   height="auto"
                   borderRadius={9999}
+                  backgroundOpacity={0.1}
+                  blur={11}
+                  className="rounded-full shadow-xl"
+                >
+                  <button
+                    onClick={loadDemoJson}
+                    className="text-white px-8 py-3 rounded-full text-sm font-bold tracking-wide transition-all bg-transparent hover:shadow-[0_0_20px_rgba(147,51,234,0.3)]"
+                  >
+                    LOAD DEMO
+                  </button>
+                </GlassSurfaceReactBits>
+                <GlassSurfaceReactBits
+                  width="auto"
+                  height="auto"
+                  borderRadius={9999}
                   backgroundOpacity={0}
                   blur={11}
                   className="rounded-full shadow-xl"
@@ -803,7 +883,9 @@ Return only well-formed JSON that strictly follows the schema and constraints ab
                         </p>
                       </div>
                       <div className="flex-shrink-0">
-                        <label className="cursor-pointer group relative block h-24 w-24 rounded-lg overflow-hidden bg-white/5 border border-white/10 hover:border-purple-500/50 transition-all">
+                        <label
+                          className={`cursor-pointer group relative block h-24 w-24 rounded-lg overflow-hidden bg-white/5 border border-white/10 hover:border-purple-500/50 transition-all ${isDemoMode ? "opacity-50 cursor-not-allowed" : ""}`}
+                        >
                           {scene.preview ? (
                             <img
                               src={scene.preview}
@@ -813,7 +895,7 @@ Return only well-formed JSON that strictly follows the schema and constraints ab
                             <div className="h-full w-full flex flex-col items-center justify-center text-slate-600 group-hover:text-purple-400 transition-colors">
                               <ImageIcon size={20} className="mb-1" />
                               <span className="text-[9px] uppercase">
-                                Upload
+                                {isDemoMode ? "Preview" : "Upload"}
                               </span>
                             </div>
                           )}
@@ -821,6 +903,7 @@ Return only well-formed JSON that strictly follows the schema and constraints ab
                             type="file"
                             className="hidden"
                             accept="image/*"
+                            disabled={isDemoMode}
                             onChange={(e) => handleImageUpload(idx, e)}
                           />
                         </label>
@@ -831,16 +914,55 @@ Return only well-formed JSON that strictly follows the schema and constraints ab
               </div>
 
               <div className="pt-8 border-t border-white/10">
-                <button
-                  onClick={generateZip}
-                  className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white py-4 rounded-xl font-bold tracking-widest uppercase text-sm shadow-lg shadow-purple-900/20 transition-all transform hover:scale-[1.01]"
-                >
-                  Download Entry Bundle
-                </button>
-                <p className="text-center text-slate-500 text-xs mt-4">
-                  Extract the zip to your project root. Add the entry ID to
-                  index.json manually.
-                </p>
+                {isDemoMode ? (
+                  <>
+                    <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4 mb-4">
+                      <p className="text-blue-300 text-sm font-mono">
+                        ✨ Demo Mode Active - This is a preview of a dream entry
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        localStorage.setItem(
+                          "morpheus_demo_entry_added",
+                          "2025-01-14",
+                        );
+                        setDemoAlreadyAdded(true);
+                        setIsParsed(false);
+                        setJsonText("");
+                        setDate(new Date().toISOString().split("T")[0]);
+                        setFormData({
+                          originalTranscription: "",
+                          summary: "",
+                          keywords: "",
+                          scenes: [],
+                          fragments: "",
+                        });
+                        setScenes([]);
+                        setIsDemoMode(false);
+                        showToast(
+                          "Demo entry added! Refresh to see it in your gallery.",
+                        );
+                      }}
+                      className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white py-4 rounded-xl font-bold tracking-widest uppercase text-sm shadow-lg shadow-purple-900/20 transition-all transform hover:scale-[1.01]"
+                    >
+                      Add This Dream to Gallery
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      onClick={generateZip}
+                      className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white py-4 rounded-xl font-bold tracking-widest uppercase text-sm shadow-lg shadow-purple-900/20 transition-all transform hover:scale-[1.01]"
+                    >
+                      Download Entry Bundle
+                    </button>
+                    <p className="text-center text-slate-500 text-xs mt-4">
+                      Extract the zip to your project root. Add the entry ID to
+                      index.json manually.
+                    </p>
+                  </>
+                )}
               </div>
             </div>
           </div>
